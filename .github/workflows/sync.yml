@@ -2,7 +2,8 @@ name: Repo Sync
 
 on:
   schedule: 
-  - cron: "*/15 * * * *" # every 15 minutes. set to whatever interval you like
+  - cron: "*/5 * * * *" # every 15 minutes. set to whatever interval you like
+  workflow_dispatch:
 
 jobs:
   repo-sync:
@@ -16,10 +17,10 @@ jobs:
         source_repo: ${{ secrets.SOURCE_REPO }}
         source_branch: main
         destination_branch: ${{ secrets.INTERMEDIATE_BRANCH }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.WORKFLOW_TOKEN }}
     - uses: repo-sync/pull-request@v2
       name: Create pull request
       with:
         source_branch: ${{ secrets.INTERMEDIATE_BRANCH }}
         destination_branch: main
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.WORKFLOW_TOKEN }}
