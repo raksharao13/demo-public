@@ -2,7 +2,7 @@ name: Repo Sync
 
 on:
   schedule: 
-  - cron: "*/1440 * * * *" # every 15 minutes. set to whatever interval you like
+  - cron: '0 0 * * *'  # Runs at midnight every day
   workflow_dispatch:
 
 jobs:
