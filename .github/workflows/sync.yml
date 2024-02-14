@@ -13,8 +13,6 @@ jobs:
     steps:
     - name: Checkout public repo code
       uses: actions/checkout@v3
-      with:
-        ref: repo-sync
     - name: Set up Git configuration
       run: |
         git config --global user.name "${{ secrets.GIT_USER_NAME }}"
