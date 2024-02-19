@@ -3,6 +3,8 @@ name: Repo Sync
 on:
   schedule: 
   - cron: '0 0 * * *'
+  repository_dispatch:
+    types: [webhook-event]
   
   workflow_dispatch:
 
