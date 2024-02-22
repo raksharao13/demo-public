@@ -1,0 +1,45 @@
+name: Repo Sync
+
+on:
+  schedule: 
+  - cron: '0 0 * * *'
+  repository_dispatch:
+    types: [webhook-event]
+  
+  workflow_dispatch:
+
+jobs:
+  repo-sync:
+    name: Repo Sync
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout public repo code
+      uses: actions/checkout@v3
+    - name: Set up Git configuration
+      run: |
+        git config --global user.name "${{ secrets.GIT_USER_NAME }}"
+        git config --global user.email "${{ secrets.GIT_USER_EMAIL }}"
+    - name: Sync internal code repo to main branch
+      run: |
+        echo "Remove extra headers configured for requests"
+        git config --unset-all http."https://github.com/".extraheader || :
+        
+        echo "Set origin URL with token"
+        git remote set-url origin "https://${{ secrets.WORKFLOW_TOKEN }}@github.com/raksharao13/demo-public.git"
+        
+        echo "Adding upstream"
+        git remote add upstream ${{ secrets.SOURCE_REPO }}
+        
+        echo "Fetching upstream"
+        git fetch upstream --quiet
+        
+        echo "Pushing changings from upstream to origin"
+        git push origin "refs/remotes/upstream/main:refs/heads/main" --force
+        
+        echo "Force sync all tags"
+        git tag -d $(git tag -l) > /dev/null
+        git fetch upstream --tags --quiet
+        git push origin --tags --force
+        
+        echo "Removing upstream"
+        git remote rm upstream
