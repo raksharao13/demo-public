@@ -25,7 +25,7 @@ jobs:
         git config --unset-all http."https://github.com/".extraheader || :
         
         echo "Set origin URL with token"
-        git remote set-url origin "https://${{ secrets.WORKFLOW_TOKEN }}@github.com/raksharao13/demo-public.git"
+        git remote set-url origin "https://${{ secrets.WORKFLOW_TOKEN }}@github.com/$GITHUB_REPOSITORY"
         
         echo "Adding upstream"
         git remote add upstream ${{ secrets.SOURCE_REPO }}
